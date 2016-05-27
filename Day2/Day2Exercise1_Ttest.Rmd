@@ -1,0 +1,284 @@
+---
+title: "T-testing the s*** out of your data"
+author: "Riccardo Fusaroli"
+date: "May 23, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Language in Depression
+
+In this exercise we will explore whether depression is associated with a specific way of speaking.
+
+### Structure of the exercise
+
+- Loading the libraries
+- Setting the directory and loading the data
+- Look at the data (which variables are there?)
+
+- What to look for:
+  - External validity (characteristics of the participants)
+  - Hypothesis driven exploration (plot the relevant variables)
+
+- Visualize the data:
+  - Barplot
+  - Boxplot
+  - Violinplot
+
+- Quantitatively describe the data
+  - Mean
+  - SD
+  - Median
+  - Quartiles
+  
+- Let's go after the hypotheses!
+  - Word count and depression
+  - Use of positive words and depression (plot + statistical summary)
+  - Use of negative words and depression (plot + statistical summary)
+  - Use of past tense and depression (plot + statistical summary)
+
+### Loading the relevant libraries
+
+Load necessary libraries : what will you need?
+
+- e.g. something to plot with
+
+```{r}
+
+```
+
+### Define your working directory and load the data
+
+- Create a new variable called locpath (localpath)
+- Set it to be equal to your working directory
+- Move to that directory (setwd(locpath))
+- Load the data: "Day2Exercise1.csv" (use read.csv(fileName))
+
+```{r}
+
+getwd()
+#locpath=
+setwd(locpath)
+#Data =
+
+```
+
+### Visualize the dataset
+
+Take a look at the data
+- look at the head (headers plus first 6 lines)
+- get number of rows, number of columns
+- look at one row, one column
+- look at one category (f.ex. diagnosis)
+- select all participant with a diagnosis
+
+```{r}
+
+# Take a look at the first 6 lines
+head(Data)
+# How many datapoints?
+nrow(Data)
+# How many features?
+ncol(Data)
+
+# Select row 3 only
+Data[3,]
+# Select column 4 only
+Data[,4]
+
+# Visualize a specific feature
+Data$diagnosis
+
+# Select only participants with depression
+Data[Data$diagnosis==1,]
+```
+
+### Make sure the variables are in the right format (e.g. numeric vs. factor)
+
+In particular, pay attention to:
+- participant id
+- gender
+- diagnosis
+
+```{r}
+
+
+```
+
+### Quantify the dataset
+
+You can also get a quantitative overview over the different variables (Min, 1st Quartile, Median, Mean, 3rd Quartile, Max) using summary() and sd()
+
+```{r}
+
+```
+
+### Let's get to business - checking the participant sample
+
+It's important to get a feel for your data and plots are often the best way to do so.
+
+First we want to check a few things:
+
+- How many participants do we have? How many with a diagnosis? How many in the comparison group?
+- What about age and gender? Are they equally represented in the data? and in the two groups?
+
+#### We start with number of participants and by group
+
+This is simple. Let's just summarize the column diagnosis
+
+```{r}
+
+cdata <- aggregate(Data["nr"], by=Data[c("diagnosis")], FUN=length)
+
+```
+
+#### What about gender? In the whole sample and in each group
+
+
+```{r}
+
+
+```
+
+#### What about age? In the full sample and by diagnosis?
+
+- Create the plot and specify the variables at stake
+- Define which kind of plot
+- Add text to the plot
+- Calculate it (using aggregate)
+
+What can we infer from the graph? And from the calculation?
+
+```{r}
+
+# Boxplot
+
+plot2 <- ggplot(Data) + geom_boxplot(aes(x=diagnosis,y=age, fill=diagnosis)) +
+          ggtitle("Boxplot representing the participants' age by diagnosis") + 
+          xlab("Diagnosis") + 
+          ylab("number of participants") + 
+          scale_x_discrete(labels=c("Comparison", "Depression"))
+print(plot2)
+
+# Violin Plot
+
+# Use aggregate to calculate mean and sd of age by diagnosis
+
+```  
+
+#### What about education? In the full sample and by diagnosis?
+
+What can we infer from the graph? And from the calculation?
+
+```{r}
+
+```
+
+
+### From participants to relations: Total words used
+
+Let's try now to look at relations of data
+
+So for example: do people with depression use less words than not depressed people?
+
+#### Plotting
+
+Let's use a plot to check that out:
+- create a plot
+- define the relevant variables
+- define the kind of plot
+- add axes and text
+
+What can you infer from the graph?
+
+```{r}
+
+
+```
+
+#### Statistical testing
+
+There seems to be a difference. But how big is it? And how likely is to see that difference if the null hypothesis were true?
+
+```{r}
+model1=lm(totalWords~diagnosis,Data)
+summary(model1)
+```
+
+### From participants to relations: % of positive words
+
+Let's focus on more specific word usage: The % of positive words 
+
+#### Plotting
+
+Let's use a plot to check that out:
+- create a plot
+- define the relevant variables
+- define the kind of plot
+- add axes and text
+
+What can you infer from the graph?
+
+```{r}
+
+```
+
+#### Statistical testing
+
+There seems to be a difference. But how big is it? And how likely is to see that difference if the null hypothesis were true?
+
+```{r}
+```
+
+### From participants to relations: % of negative words
+
+Let's focus on more specific word usage: The % of negative words 
+
+#### Plotting
+
+What can you infer from the graph?
+
+```{r}
+
+```
+
+#### Statistical testing
+
+There seems to be a difference. But how big is it? And how likely is to see that difference if the null hypothesis were true?
+
+```{r}
+
+```
+
+### From participants to relations: % of past tense verbs
+
+Let's focus on more specific word usage: The % of past tense verbs
+
+#### Plotting
+
+What can you infer from the graph?
+
+```{r}
+
+```
+
+#### Statistical testing
+
+There seems to be a difference. But how big is it? And how likely is to see that difference if the null hypothesis were true?
+
+```{r}
+
+```
+
+### What's next?
+
+Is depression a yes/no diagnosis? What about severity of clinical features?  [Tomorrow]
+
+  - Word count and depression severity
+  - Use of positive and depression severity (plot)
+  - Use of negative and depression severity (plot)
+  - Use of past tense and depression severity (plot)
+

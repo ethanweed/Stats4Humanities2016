@@ -1,0 +1,176 @@
+---
+title: "Plotting Exercise"
+author: "Riccardo Fusaroli"
+date: "May 23, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+The exercise explores questions on fuel economy of cars produced in different regions.
+
+WHICH QUESTIONS??
+
+The data is a real dataset from the EPA, which is available within R through the package fueleconomy.
+
+We will now load the relevant packages:
+- fueleconomy contains the data
+- dplyr contains functions to easily subset and manipulate your data
+- ggplot2 allows you to visualize the data in fancy ways
+
+```{r Load Libraries and Data}
+library(dplyr)
+library(fueleconomy)
+library(ggplot2)
+```
+
+### Subsetting
+
+Sometimes you need to only look at a subset of your data.
+Here we learn how to select subsets of a dataset: a subset of car makes: "Chevrolet","Dodge","Ford","Mitsubishi","Nissan","Toyota","Volvo","Volkswagen","BMW"
+
+```{r Subsetting}
+# select specific makes to simplify data set
+dat = subset(vehicles,make==c("Chevrolet","Dodge","Ford","Mitsubishi","Nissan","Toyota",
+                              "Volvo","Volkswagen","BMW"))
+```
+
+### Scatterplot
+
+Let's visualize the data! We plot the cty (outcome - fuel economy for city driving) against the year of production and attribute different colors to the different makes.
+
+```{r Scatterplot}
+
+ggplot(dat, aes(year,cty,color=make)) + 
+  geom_point()
+
+```
+
+### Excluding Data
+
+Hmm, there's something really weird, isn't there? The dataset includes electric cars, which 
+
+```{r ExcludingData}
+# Exclude electric cars because they are outliers. Discussion on role of outliers and 
+# a prior vs a posteriori justifications for excluding them
+Electric = dat$fuel=="Premium Gas or Electricity" | 
+  dat$fuel=="Regular Gas or Electricity" | 
+  dat$fuel=="Electricity"|
+  dat$fuel=="Regular Gas and Electricity" | 
+  dat$fuel=="Premium Gas and Electricity"
+
+dat=dat[!Electric,]
+
+ggplot(dat, aes(year,cty,color=make)) + 
+  geom_point()
+```
+
+### Avoiding Overplotting
+
+Can you spot the difference?
+
+Here is yet another issue: Many cars produced in the same year have the same output, so we can only see one of them (the others are hidden below it). Let's shake them out of hiding!
+
+```{r AvoidingOverplotting}
+
+ggplot(dat, aes(year,cty,color=make)) + 
+  geom_point(position = "jitter")
+
+```
+
+### Recoding Variables
+
+Still it's kinda hard spotting all those makes. Should we use a rougher classification in geographical areas?
+
+```{r RecodingVariables}
+dat$region[dat$make=="Chevrolet"|dat$make=="Dodge"|dat$make=="Ford"]="US"
+dat$region[dat$make=="Mitsubishi"|dat$make=="Nissan"|dat$make=="Toyota"]="Asia"
+dat$region[dat$make=="Volkswagen"|dat$make=="Volvo"|dat$make=="BMW"]="EU"
+```
+
+### Exploring relations
+
+Is there a relation between year and cty? How much does the area of production affects that?
+
+```{r Relations}
+
+#Loess
+ggplot(dat, aes(year,cty,color=region)) + 
+  geom_point(position = "jitter") +
+  stat_smooth(size=1.2)
+
+#linear
+ggplot(dat, aes(year,cty,color=region)) + 
+  geom_point(position = "jitter") +
+  stat_smooth(method = "lm",size=1.2)
+
+#polynomial
+ggplot(dat, aes(year,cty,color=region)) + 
+  geom_point(position = "jitter") +
+  stat_smooth(method = "lm", formula = y ~ poly(x, 2),size=1.2)
+
+```
+
+### Aggregating Data
+
+
+```{r AggregatingData}
+#produce single variable table
+#aggregating data to view at a glance, and set up intuitions about bar-plots 
+#introduce tilde in R 
+meanRegion=aggregate(cty~region,data=dat,FUN=mean)
+print(meanRegion)
+
+sdRegion=aggregate(cty~region,data=dat,FUN=sd)
+print(sdRegion)
+
+#produce multi-variable table
+#introduce concept of explaining variability by highlighting how the SD decreases when you
+#also aggregate according to number of cylinders
+meanRegionCyl=aggregate(cty~region*cyl,data=dat,FUN=mean)
+sdRegionCyl=aggregate(cty~region*cyl,data=dat,FUN=sd)
+
+print(meanRegionCyl)
+print(sdRegionCyl)
+
+```
+
+### Barplots
+
+Let's now explore these aggregated data with a plot
+
+```{r Barplots}
+# use aggregated data to plot - simple barplot
+ggplot(meanRegion, aes(x=region, y = cty)) + 
+  geom_bar(stat = 'identity') +
+  geom_errorbar(aes(ymin=meanRegion$cty-sdRegion$cty, ymax=meanRegion$cty+sdRegion$cty),
+                position=position_dodge(.9), 
+                stat = 'identity',
+                size=.3,    # Thinner lines
+                width=.2
+  )
+
+#grouped barplot - emnphasise change in size of error bars
+ggplot(meanRegionCyl, aes(x=cyl, y = cty, fill=region)) + 
+  geom_bar(position="dodge", stat = 'identity') +
+  geom_errorbar(aes(ymin=meanRegionCyl$cty-sdRegionCyl$cty, ymax=meanRegionCyl$cty+sdRegionCyl$cty),
+                position=position_dodge(.9), stat = 'identity',
+                size=.3,    # Thinner lines
+                width=.2)
+
+```
+
+### Boxplots and violinplots
+
+But are barplots good? See video.
+
+```{r Boxplots}
+
+ggplot(dat, aes(x=region, y = cty)) + geom_boxplot()
+ggplot(dat, aes(x=region, y = cty)) + geom_violin()
+
+```
+
+Round-up discussion: Tuesday - inferences about barplots, Wednesday - inferences about correlation

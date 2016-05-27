@@ -1,0 +1,288 @@
+---
+title: "Final exercise"
+author: "Riccardo Fusaroli"
+date: "May 26, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# The exciting final exercise - The Lego project
+
+During this exercise you will try out your new fancy R skills on a complex dataset.
+
+By the end of the exercise you will have to:
+
+- Characterize the samples of participants and their external validity.
+- Identify problems in the dataset
+- Plot and statistically test 3 different hypotheses
+
+The hypotheses are:
+- Pairs create more clear communication than individuals do.
+- Empathy and systemizing scores also impact clarity of commmunication.
+
+In particular you will have to:
+
+- Load the Lego dataset (FinalExercise.csv)
+- Explore the dataset
+- Make sure R knows which variables are numeric and which are categorical (factors)
+- Describe (mean, sd, median, quartiles) and plot (histogram) the participants' gender, age and education (external validity)
+- Describe and plot the participants' Empathy and Systemizing Scores
+- Describe and plot Empathy and Systemizing according to gender
+- Test for significant differences (t-test) between genders
+- Load the new Lego dataset (AllData.csv)
+
+- Describe and plot the raters' Accuracy in guessing the concepts represented by the models.
+
+- Plot, test and describe the impact of condition (individual vs. pair) on accuracy. (N.b. How do we control for concepts?)
+- Plot, test and describe the impact of Empathy and Systemizing on accuracy
+
+- Plot, test and describe the impact of condition (individual vs. pair) on clarity
+- Plot, test and describe the impact of Empathy and Systemizing on clarity
+
+But let's take it one step at a time!
+
+
+## Load the libraries
+
+- Something to plot with?
+- Other libraries?
+
+```{r Libraries}
+library(ggplot2)
+# Are you going to use other libraries?
+library(doBy)
+library(dplyr)
+```
+
+## Load a dataset
+- You need to set the working directory (where you have put the dataset and this script)
+
+```{r DataLoad}
+# First we define the working directory where the file is
+locpath=
+# Then we go to the working directory
+setwd(locpath)
+# Then we load the file
+Data=read.csv('FinalExercise.csv')
+
+```
+
+## Then check how the dataset looks like and what the variables are called
+
+This dataset is particularly complex for one reason: we have 2 sets of participants.
+
+The first set is the builders (who built the Lego models), the second raters (who rated the Lego models). These two sets are non-overlapping!
+
+Can you identify the relevant variables? Remember that you need:
+- the identity of the participants,
+- the demographic variables for both sets of participants,
+- Condition (individual vs. collective) and order of conditions
+- Accuracy and clarity judgments.
+
+
+```{r DataExploration}
+# A quick look at the first rows
+head(Data)
+
+```
+
+## Make sure that all the relevant data are in right format (numeric and factors)
+
+```{r DataFormats}
+
+# If the variable is categorical:
+# Data$VariableName=as.factor(Data$VariableName)
+# If the variable is numeric:
+# Data$VariableName=as.numeric(Data$VariableName)
+
+# What is builder?
+
+# What is builder gender?
+
+# What is builder age?
+
+# What is builder education?
+
+# What is builder empathy score?
+
+# What is builder systemizing score?
+
+# What is builder collective empathy score?
+
+# What is builder collective systemizing score?
+
+# What is rater?
+
+# What is rater gender?
+
+# What is rater age?
+
+# What is rater education?
+
+# What is accuracy?
+
+# What is clarity?
+
+# What is originality
+
+# Condition
+
+# Order
+
+# Concept
+
+```
+
+## Now characterize your participants (number, age, education, gender, EQ, SQ)
+
+Describe numerically and visually the demographic characteristics of the participants.
+- Make sure to distinguish between raters and builders
+- Notice that the dataset is very big and there are many rows per each participant. Before calculating the distribution of gender/age/etc. you need to make sure you have only one row per participant. We create subdatasets for you, check the code!
+- For builders only make sure to describe EQ and SQ as well
+
+```{r}
+
+# Creating subdatasets
+Builders=Data[!duplicated(Data$Builder),]
+Raters=Data[!duplicated(Data$Rater),]
+
+```
+
+### A closer look at EQ and SQ
+
+- How are EQ and SQ distributed?
+- Are there gender effects in EQ and SQ?
+
+```{r}
+
+
+```
+
+## Now it's time to test and plot our hypotheses
+
+### Hypothesis 1: Collective models are easier to guess than individual ones.
+
+- Describe accuracy by condition (numerically and with a plot). N.B. In order to calculate mean Accuracy, you need to first turn it into a numeric variable.
+
+- Test the difference in accuracy by condition (keeping accuracy as binomial). Which test are you going to use? Is the dependent variable numeric (lm()) or binomial (glm())? N.B. Remember to make sure your outcome variable is in the right format (numeric or factor/binomial). P.S. Ignore random effects for now.
+
+```{r}
+
+# Here you calculate mean and sd of accuracy by condition
+Data$AccuracyPerc=as.numeric(Data$Accuracy)
+# Notice! It's now 1 & 2 instead of 0 & 1
+Data$AccuracyPerc=Data$AccuracyPerc-1
+
+# Describe AccuracyPerc by condition (hint, use aggregate!)
+
+# Here you make the plot
+
+# Here you make the statistical test to assess: i) how likely your data are given the null hypothesis; ii) how big the difference is. Remember to use Accuracy
+
+
+```
+
+Now add the random effects:
+- Participant ID (Rater)
+- Concept
+- Model ID
+
+Does adding random effects make a difference? Why do you think is that?
+OPTIONAL: Could you think of a plot that explores this issue?
+
+```{r}
+
+
+```
+
+### Hypothesis 1a: Using the clarity variable
+
+- Describe clarity by condition. 
+- Which plot are you going to use?
+- Which test are you going to use? Is the dependent variable numeric (lmer()) or binomial (glmer())?
+- This time just run the model with the random effects on
+
+
+```{r}
+
+# Here you calculate mean and sd of clarity by condition
+
+# Here you make the plot
+
+# Here you make the statistical test to assess: i) how likely your data are given the null hypothesis; ii) how big the difference is
+
+
+```
+
+
+#### Let's also run a sanity check: Are clarity judgments related to accuracy?
+
+- are people good at introspecting?
+- were our clarity questions internally valid (also called construct valid)? 
+
+```{r}
+
+```
+
+### Hypothesis 2: Does high empathy relate to easier to understand models (Accuracy)?
+
+Remember that there are two EQ scores: one for the individuals and one for the pairs (mean of the 2 individuals). This splits the hypothesis in two analyses:
+- Subsetting only individual condition, predict accuracy from BuilderEQ
+- Subsetting only collective condition, predict accuracy from BuilderCollectiveEQ
+
+Which test are you going to use? Is the dependent variable numeric (lmer()) or binomial (glmer())? N.B. Remember to make sure your variable is in the right format (numeric or factor/binomial)
+
+
+```{r, echo=FALSE}
+
+# Here you make the statistical test to assess: i) how likely your data are given the null hypothesis; ii) how big the effect size is
+
+# Here you make a plot. E.G. Calculate mean accuracy by Empathy score. Then use a scatterplot
+
+```
+
+### Hypothesis 2a:  High empathy individuals create easier to understand models (Clarity)
+
+- Which test are you going to use? Is the dependent variable numeric (lmer()) or binomial (glmer())? N.B. Remember to make sure your variable is in the right format (numeric or factor/binomial)
+
+
+```{r, echo=FALSE}
+
+# Here you make the statistical test to assess: i) how likely your data are given the null hypothesis; ii) how big the effect size is
+
+# Here you make the plot
+
+```
+
+### Hypothesis 3: High systemizing individuals create easier to understand models
+
+Remember that there are two SQ scores: one for the individuals and one for the pairs (mean of the 2 individuals). This splits the hypothesis in two analyses:
+- Subsetting only individual condition, predict accuracy from BuilderSQ
+- Subsetting only collective condition, predict accuracy from BuilderCollectiveSQ
+
+Which test are you going to use? Is the dependent variable numeric (lmer()) or binomial (glmer())? N.B. Remember to make sure your variable is in the right format (numeric or factor/binomial)
+
+
+```{r, echo=FALSE}
+
+# Here you make the statistical test to assess: i) how likely your data are given the null hypothesis; ii) how big the effect size is
+
+# Here you make a plot. N.B. Calculate mean accuracy by Systemizing score. 
+
+```
+
+### Hypothesis 3a: Now using the clarity score
+
+- Which test are you going to use? Is the dependent variable numeric (lmer()) or binomial (glmer())? N.B. Remember to make sure your variable is in the right format (numeric or factor/binomial)
+
+
+```{r, echo=FALSE}
+
+# Here you make the statistical test to assess: i) how likely your data are given the null hypothesis; ii) how big the effect size is
+
+# Here you make the plot
+
+```

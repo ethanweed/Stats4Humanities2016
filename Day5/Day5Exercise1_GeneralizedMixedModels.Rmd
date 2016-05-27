@@ -1,0 +1,37 @@
+---
+title: "Exercise on generalized mixed effects models"
+author: "Riccardo Fusaroli"
+date: "May 27, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Language development in Autism Spectrum Disorder (ASD)
+
+In this exercise we will explore language development in US children with and without ASD.
+
+### Structure of the exercise
+
+Basic stuff:
+- Loading the libraries
+- Setting the directory and loading the data
+- Look at the data (which variables are there? Are they in the right format)
+- Describe the participants (by diagnosis)
+
+We will try to answer two separate questions:
+
+- Do children with ASD develop language differently from non-ASD children?
+- Do parents speak differently to children with ASD than to non-ASD ones?
+  
+### Loading the relevant libraries
+
+Load necessary libraries : what will you need?
+
+- e.g. something to plot with
+```{r}
+
+```
+

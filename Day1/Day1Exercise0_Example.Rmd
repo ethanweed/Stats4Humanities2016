@@ -1,0 +1,50 @@
+---
+title: "Day 1 - Exercise 1"
+author: "Riccardo Fusaroli"
+date: "May 18, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## Welcome to your first exercise (in R Markdown)
+
+This is an R Markdown document. Markdown is a simple way of alternating explanatory text (the white background) and code (the grey background). 
+It also generates nice reports from your code.
+For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+Let's try it out using Josh's exercise.
+
+## Exercise 1) – Setting up a package in R and using simple functions
+
+a)	Install the “fueleconomy” package. This will give you access to the data which we will use in this lab. The data are from the US Environmental Protection Agency database, which presents miles per gallon fuel economy for most makes and models sold in the US
+
+
+```{r Install package}
+#install.packages('fueleconomy')
+library(fueleconomy)
+```
+
+b)	Explore the data (a dataset called 'common')
+
+```{r Explore the data}
+
+summary(common) # summarizes all columns (variables)
+head(common) # shows the first 5 rows (data points)
+
+```
+
+c) What is the time range of the data set? What are the earliest and latest years in the data?
+
+```{r Time Range}
+range(common$years)
+min(common$years)
+max(common$years)
+
+```
+
+### Check this advanced alternative
+
+The time range is from `r range(common$years)[1]` to `r range(common$years)[2]` 

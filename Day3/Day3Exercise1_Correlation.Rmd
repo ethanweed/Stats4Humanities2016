@@ -1,0 +1,188 @@
+---
+title: "Let's correlate the s**** out of the data"
+author: "Riccardo Fusaroli"
+date: "May 26, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Language in Depression - Part 2
+
+In this exercise, based on real data, we will explore whether depression severity is associated with a specific way of speaking.
+
+### Structure of the exercise
+
+- Loading the libraries
+- Setting the directory and loading the data
+
+Note that we know the dataset already, so we are skipping that part.
+
+- Visualize the data:
+  - Histograms (distribution)
+  - Scatterplots
+  - Barplot
+  - Boxplot
+  - Violinplot
+
+- Quantitatively describe the data
+  - Mean
+  - SD
+  - Median
+  - Quartiles
+  
+- Let's go after the hypotheses!
+  - Word count and depression
+  - Use of positive words and depression (plot + statistical summary)
+  - Use of negative words and depression (plot + statistical summary)
+  - Use of past tense and depression (plot + statistical summary)
+
+### Loading the relevant libraries
+
+Load necessary libraries : what will you need?
+
+- e.g. something to plot with
+
+```{r}
+
+```
+
+### Define your working directory and load the data
+
+- Create a new variable called locpath (localpath)
+- Set it to be equal to your working directory
+- Move to that directory (setwd(locpath))
+- Load the data: "Day2Exercise1.csv" (use read.csv(fileName))
+
+```{r}
+
+getwd()
+locpath=
+setwd(locpath)
+Data =
+
+```
+
+### Make sure the variables are in the right format (e.g. numeric vs. factor)
+
+In particular, pay attention to:
+- participant id
+- gender
+- diagnosis
+
+```{r}
+
+
+```
+
+### Let's check the new variable: depression severity
+
+Plot it and describe it by diagnosis. Is it normally distributed?
+
+```{r}
+
+# Plot in the full sample
+
+# Aggregate by diagnosis
+
+# Subset the data (if relevant)
+
+```
+
+### Depression severity and Total words used
+
+Let's try now to look at relations of data
+
+So for example: do people with more severe depression use less words than less depressed people?
+
+#### Plotting
+
+Let's use a plot to check that out:
+- create a plot
+- define the relevant variables
+- define the kind of plot
+- add axes and text
+
+What can you infer from the graph?
+
+```{r}
+
+
+```
+
+#### Statistical testing
+
+Is there a relation? How big is it? How likely is to see that relation in the data if the null hypothesis were true?
+
+```{r}
+
+# N.b. Make sure you insert the subset of the data if you think that is relevant
+
+```
+
+### Depression severity and % of positive words
+
+Let's focus on more specific word usage: The % of positive words 
+
+#### Plotting
+
+Let's use a plot to check that out:
+- create a plot
+- define the relevant variables
+- define the kind of plot
+- add axes and text
+
+What can you infer from the graph?
+
+```{r}
+
+```
+
+#### Statistical testing
+
+There seems to be a difference. But how big is it? And how likely is to see that difference if the null hypothesis were true?
+
+```{r}
+```
+
+### Depression severity and % of negative words
+
+Let's focus on more specific word usage: The % of negative words 
+
+#### Plotting
+
+What can you infer from the graph?
+
+```{r}
+
+```
+
+#### Statistical testing
+
+There seems to be a difference. But how big is it? And how likely is to see that difference if the null hypothesis were true?
+
+```{r}
+
+```
+
+### Depression severity and % of past tense verbs
+
+Let's focus on more specific word usage: The % of past tense verbs
+
+#### Plotting
+
+What can you infer from the graph?
+
+```{r}
+
+```
+
+#### Statistical testing
+
+There seems to be a difference. But how big is it? And how likely is to see that difference if the null hypothesis were true?
+
+```{r}
+
+```
