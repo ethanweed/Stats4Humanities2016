@@ -20,24 +20,11 @@ In this exercise, based on real data, we will explore whether depression severit
 
 Note that we know the dataset already, so we are skipping that part.
 
-- Visualize the data:
-  - Histograms (distribution)
-  - Scatterplots
-  - Barplot
-  - Boxplot
-  - Violinplot
-
-- Quantitatively describe the data
-  - Mean
-  - SD
-  - Median
-  - Quartiles
-  
 - Let's go after the hypotheses!
-  - Word count and depression
-  - Use of positive words and depression (plot + statistical summary)
-  - Use of negative words and depression (plot + statistical summary)
-  - Use of past tense and depression (plot + statistical summary)
+  - Word count and depression severity (plot + statistical summary)
+  - Use of positive words and depression severity (plot + statistical summary)
+  - Use of negative words and depression severity (plot + statistical summary)
+  - Use of past tense and depression severity (plot + statistical summary)
 
 ### Loading the relevant libraries
 

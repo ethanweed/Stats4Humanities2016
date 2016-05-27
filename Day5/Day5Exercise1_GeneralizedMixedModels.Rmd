@@ -35,3 +35,66 @@ Load necessary libraries : what will you need?
 
 ```
 
+### Define your working directory and load the data
+
+- Create a new variable called locpath (localpath)
+- Set it to be equal to your working directory
+- Move to that directory (setwd(locpath))
+- Load the data: "Day2Exercise1.csv" (use read.csv(fileName))
+
+```{r}
+
+getwd()
+#locpath=
+setwd(locpath)
+#Data =
+
+```
+
+### Visualize the dataset 
+
+Identify relevant variables: participants demographic characteristics, diagnosis (ASD, ADOS, EL, Mullen) Visit, Number of unique words used, length of utterance in both child and parents.
+
+Make sure the variables are in the right format
+
+```{r}
+
+```
+
+### Characterize the participants
+
+Remember to check them by diagnosis
+
+```{r}
+
+```
+
+## Let's test hypotheses
+
+### Hypothesis 1a: Unique words used by the child change: i) over time, ii) according to diagnosis
+
+Remember to plot the data first and then to run a statistical test.
+
+```{r}
+
+```
+
+### Hypothesis 1b: Length of utterance used by the child change: i) over time, ii) according to diagnosis
+
+```{r}
+
+```
+
+### Hypothesis 2a: Unique words used by the child change: i) over time, ii) according to diagnosis
+
+Remember to plot the data first and then to run a statistical test.
+
+```{r}
+
+```
+
+### Hypothesis 2b: Length of utterance used by the child change: i) over time, ii) according to diagnosis
+
+```{r}
+
+```
