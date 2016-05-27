@@ -55,7 +55,7 @@ setwd(locpath)
 
 Identify relevant variables: participants demographic characteristics, diagnosis (ASD, ADOS, EL, Mullen) Visit, Number of unique words used, length of utterance in both child and parents.
 
-Make sure the variables are in the right format
+Make sure the variables are in the right format.
 
 ```{r}
 
@@ -74,6 +74,8 @@ Remember to check them by diagnosis
 ### Hypothesis 1a: Unique words used by the child change: i) over time, ii) according to diagnosis
 
 Remember to plot the data first and then to run a statistical test.
+- Which variable(s) should be included as fixed factors?
+- Which variable(s) should be included as random factors?
 
 ```{r}
 
