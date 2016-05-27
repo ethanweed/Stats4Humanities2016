@@ -79,13 +79,13 @@ Remember to plot the data first and then to run a statistical test.
 
 ```
 
-### Hypothesis 1b: Length of utterance used by the child change: i) over time, ii) according to diagnosis
+### Hypothesis 1b: Length of utterance used by the child changes: i) over time, ii) according to diagnosis
 
 ```{r}
 
 ```
 
-### Hypothesis 2a: Unique words used by the child change: i) over time, ii) according to diagnosis
+### Hypothesis 2a: Unique words used by the parent change: i) over time, ii) according to diagnosis
 
 Remember to plot the data first and then to run a statistical test.
 
@@ -93,8 +93,17 @@ Remember to plot the data first and then to run a statistical test.
 
 ```
 
-### Hypothesis 2b: Length of utterance used by the child change: i) over time, ii) according to diagnosis
+### Hypothesis 2b: Length of utterance used by the parent changes: i) over time, ii) according to diagnosis
 
 ```{r}
 
 ```
+
+### Adding new variables
+
+Choose an additional variable (from exercise 4) to add to the model. Test its impact on the average level of unique words. Test its impact on the change in unique words over time.
+
+```{r}
+
+```
+
