@@ -1,0 +1,216 @@
+---
+title: "Let's ANOVA the s**** out of the data"
+author: "Riccardo Fusaroli"
+date: "May 26, 2016"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+# Fuel economy of cars produced in different regions
+
+In this exercise we will explore the fuel economy of cars produced in different regions.
+
+The dataset is from the EPA
+
+cty is outcome - fuel economy for city driving
+
+### Structure of the exercise
+
+### Loading the relevant libraries
+
+Load necessary libraries : what will you need?
+
+```{r}
+
+library(ggplot2)
+library(fueleconomy)
+
+library(Hmisc)
+library(reshape)
+library(heplots)
+library(nlme)
+library(ez)
+
+```
+
+### Exercise 1
+
+Question 1d
+
+```{r}
+
+mdl1 = aov(cty ~ region, data = dat)
+summary(mdl1)
+```
+
+Question 1e
+
+```{r}
+
+meanRegion=aggregate(cty~region,data=dat,FUN=mean)
+sdRegion=aggregate(cty~region,data=dat,FUN=sd)
+
+ggplot(meanRegion, aes(x=region, y = cty)) + 
+  geom_bar(stat = 'identity') +
+  geom_errorbar(aes(ymin=meanRegion$cty-sdRegion$cty, ymax=meanRegion$cty+sdRegion$cty),
+                position=position_dodge(.9), 
+                stat = 'identity',
+                size=.3,    # Thinner lines
+                width=.2
+  )
+
+```
+
+Question 1f
+
+```{r}
+mdl2 = aov(cyl ~ region, data = dat)
+summary(mdl2)
+
+```
+
+Question 1g
+
+```{r}
+meanCyl=aggregate(cyl~region,data=dat,FUN=mean)
+sdCyl=aggregate(cyl~region,data=dat,FUN=sd)
+
+ggplot(meanCyl, aes(x=region, y = cyl)) + 
+  geom_bar(stat = 'identity') +
+  geom_errorbar(aes(ymin=meanCyl$cyl-sdCyl$cyl, ymax=meanCyl$cyl+sdCyl$cyl),
+                position=position_dodge(.9), 
+                stat = 'identity',
+                size=.3,    # Thinner lines
+                width=.2
+  )
+
+```
+
+Question 1h
+
+```{r}
+mdl3 = aov(displ ~ region, data = dat)
+summary(mdl1)
+
+```
+
+Question 1i
+
+```{r}
+meanDispl=aggregate(displ~region,data=dat,FUN=mean)
+sdDispl=aggregate(displ~region,data=dat,FUN=sd)
+
+ggplot(meanDispl, aes(x=region, y = displ)) + 
+  geom_bar(stat = 'identity') +
+  geom_errorbar(aes(ymin=meanDispl$displ-sdDispl$displ, ymax=meanDispl$displ+sdDispl$displ),
+                position=position_dodge(.9), 
+                stat = 'identity',
+                size=.3,    # Thinner lines
+                width=.2
+  )
+```
+
+### Exercise 2
+
+Question 2d
+
+```{r}
+
+mdl1.contrast1 = c(1,0,-1)
+mdl1.contrast2 = c(1,-1,0)
+contrasts(dat$region) = cbind(mdl1.contrast1,mdl1.contrast2)
+
+mdl1Planned = aov(cty ~ region, data = dat)
+summary.lm(mdl1Planned)
+
+```
+
+Question 2e
+
+```{r}
+mdl2.contrast1 = c(-1,0,1)
+mdl2.contrast2 = c(1,-1,0)
+contrasts(dat$region) = cbind(mdl2.contrast1,mdl2.contrast2)
+
+mdl2Planned = aov(cyl ~ region, data = dat)
+summary.lm(mdl2Planned)
+
+```
+
+Question 2f
+
+```{r}
+mdl3.contrast1 = c(-1,-1,2)
+mdl3.contrast2 = c(1,-1,0)
+contrasts(dat$region) = cbind(mdl3.contrast1,mdl3.contrast2)
+
+mdl3Planned = aov(displ ~ region, data = dat)
+summary.lm(mdl3Planned)
+
+```
+
+### Exercise 3
+
+Question 3e
+
+```{r}
+
+#-------------------recoding variables------------------------------------------------
+dat$size[dat$cyl<6]="small"
+dat$size[dat$cyl==6]="medium"
+dat$size[dat$cyl>6]="large"
+dat$size = as.factor(dat$size)
+
+```
+
+Questions 3f, 3g, 3h
+
+```{r}
+mdl4 = aov(cty ~ region*size, data = dat)
+summary(mdl4)
+
+```
+
+Question 3i
+
+```{r}
+meanRegionSize=aggregate(cty~region*size,data=dat,FUN=mean)
+sdRegionSize=aggregate(cty~region*size,data=dat,FUN=sd)
+
+ggplot(meanRegionSize, aes(x=size, y = cty, fill=region)) + 
+  geom_bar(position="dodge", stat = 'identity') +
+  geom_errorbar(aes(ymin=meanRegionSize$cty-sdRegionSize$cty, ymax=meanRegionSize$cty+sdRegionSize$cty),
+                position=position_dodge(.9), stat = 'identity',
+                size=.3,    # Thinner lines
+                width=.2,                 
+  )
+
+
+```
+
+Question 3j, 3k, 3l
+
+```{r}
+mdl4 = aov(displ ~ region*size, data = dat)
+summary(mdl4)
+
+```
+
+Question 3i
+
+```{r}
+meanRegionSize=aggregate(displ~region*size,data=dat,FUN=mean)
+sdRegionSize=aggregate(displ~region*size,data=dat,FUN=sd)
+
+ggplot(meanRegionSize, aes(x=size, y = displ, fill=region)) + 
+  geom_bar(position="dodge", stat = 'identity') +
+  geom_errorbar(aes(ymin=meanRegionSize$displ-sdRegionSize$displ, ymax=meanRegionSize$displ+sdRegionSize$displ),
+                position=position_dodge(.9), stat = 'identity',
+                size=.3,    # Thinner lines
+                width=.2                 
+  )
+
+```
