@@ -31,6 +31,9 @@ We will try to answer two separate questions:
 Load necessary libraries : what will you need?
 
 - e.g. something to plot with
+- e.g. mixed effects models
+
+
 ```{r}
 
 ```
@@ -45,9 +48,9 @@ Load necessary libraries : what will you need?
 ```{r}
 
 getwd()
-#locpath=
+locpath=
 setwd(locpath)
-#Data =
+Data =
 
 ```
 

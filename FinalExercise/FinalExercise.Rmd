@@ -55,6 +55,7 @@ library(ggplot2)
 # Are you going to use other libraries?
 library(doBy)
 library(dplyr)
+library(lme4)
 ```
 
 ## Load a dataset
@@ -221,7 +222,7 @@ OPTIONAL: Could you think of a plot that explores this issue?
 #### Let's also run a sanity check: Are clarity judgments related to accuracy?
 
 - are people good at introspecting?
-- were our clarity questions internally valid (also called construct valid)? 
+- were our clarity questions internally valid (construct valid)? 
 
 ```{r}
 
