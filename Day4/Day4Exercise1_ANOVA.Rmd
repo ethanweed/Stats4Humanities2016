@@ -32,7 +32,6 @@ library(Hmisc)
 library(reshape)
 library(heplots)
 library(nlme)
-library(ez)
 
 ```
 
