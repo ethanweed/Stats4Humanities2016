@@ -13,6 +13,8 @@ knitr::opts_chunk$set(echo = TRUE)
 
 In this exercise, based on real data, we will explore whether depression severity is associated with a specific way of speaking.
 
+Background: Previous research conducted in the USA has shown that people with depression tend to speak differently from comparison groups (see Pennebaker, The secret life of pronouns). In particular, they tend to use fewer words, fewer positive words, more negative words and more past tense. A Danish student has decided to replicate these findings in the Danish population. The data you have come from his research.
+
 ### Structure of the exercise
 
 - Loading the libraries
@@ -64,9 +66,9 @@ In particular, pay attention to:
 
 ```
 
-### Let's check the new variable: depression severity
+### Exercise 1) Let's check the new variable: depression severity
 
-Plot it and describe it by diagnosis. Is it normally distributed?
+When you look at depression severity, is it normally distributed? Discuss whether the full dataset can be analyzed or whether you should only select a subset of the participants.
 
 ```{r}
 
@@ -77,6 +79,10 @@ Plot it and describe it by diagnosis. Is it normally distributed?
 # Subset the data (if relevant)
 
 ```
+
+## Exercise 2
+
+Write a short paragraph reporting the results + plots per each of the dependent variables. 
 
 ### Depression severity and Total words used
 
@@ -105,7 +111,7 @@ Is there a relation? How big is it? How likely is to see that relation in the da
 
 ```{r}
 
-# N.b. Make sure you insert the subset of the data if you think that is relevant
+#N.b. Make sure you insert the subset of the data if you think that is relevant
 
 ```
 
@@ -173,3 +179,11 @@ There seems to be a difference. But how big is it? And how likely is to see that
 ```{r}
 
 ```
+
+Exercise 3) Go to http://guessthecorrelation.com/ and play a game. How much did you score?
+
+Exercise 4) Go to http://www.tylervigen.com/spurious-correlations and have a bit of fun.
+
+Optional Exercise 5) Explore other linguistic indexes
+
+Optional Exercise 6) Add gender and age to the model

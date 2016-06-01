@@ -13,11 +13,12 @@ knitr::opts_chunk$set(echo = TRUE)
 
 In this exercise we will explore the fuel economy of cars produced in different regions.
 
-The dataset is from the EPA
+Exercise 1) – One Way ANOVA
+a)	In your own words, explain what family wise error is? 
+b)	How does ANOVA avoid having to deal with family wise error?
+c)	In your own words, explain what an F test tells us? What are the differences between an F test and a t test?
 
-cty is outcome - fuel economy for city driving
-
-### Structure of the exercise
+For the following exercises, run your script from Monday, so that you again have the fuel economy data in your workspace. For the following questions, you will use the data frame you used to prepare the barplots on Monday.
 
 ### Loading the relevant libraries
 
@@ -33,183 +34,168 @@ library(reshape)
 library(heplots)
 library(nlme)
 
-```
+# Create your dataset:
+dat=vehicles
 
-### Exercise 1
+# Subset the dataset to only have the 9 makes of cars from Monday
+dat = subset(vehicles,make==c("Chevrolet","Dodge","Ford","Mitsubishi","Nissan","Toyota","Volvo","Volkswagen","BMW"))
 
-Question 1d
+# Exclude electric cars because they are outliers. Discussion on role of outliers and 
+# a prior vs a posteriori justifications for excluding them
+Electric = dat$fuel=="Premium Gas or Electricity" | 
+  dat$fuel=="Regular Gas or Electricity" | 
+  dat$fuel=="Electricity"|
+  dat$fuel=="Regular Gas and Electricity" | 
+  dat$fuel=="Premium Gas and Electricity"
 
-```{r}
+dat=dat[!Electric,]
 
-mdl1 = aov(cty ~ region, data = dat)
-summary(mdl1)
-```
-
-Question 1e
-
-```{r}
-
-meanRegion=aggregate(cty~region,data=dat,FUN=mean)
-sdRegion=aggregate(cty~region,data=dat,FUN=sd)
-
-ggplot(meanRegion, aes(x=region, y = cty)) + 
-  geom_bar(stat = 'identity') +
-  geom_errorbar(aes(ymin=meanRegion$cty-sdRegion$cty, ymax=meanRegion$cty+sdRegion$cty),
-                position=position_dodge(.9), 
-                stat = 'identity',
-                size=.3,    # Thinner lines
-                width=.2
-  )
+dat$region[dat$make=="Chevrolet"|dat$make=="Dodge"|dat$make=="Ford"]="US"
+dat$region[dat$make=="Mitsubishi"|dat$make=="Nissan"|dat$make=="Toyota"]="Asia"
+dat$region[dat$make=="Volkswagen"|dat$make=="Volvo"|dat$make=="BMW"]="EU"
 
 ```
 
-Question 1f
+### Exercise 1d)
+
+Is there a significant overall effect of region on city fuel economy? Provide the relevant statistics in the correct form for a lab report. (don’t worry about contrasts yet, that’s for the next set of exercises)
 
 ```{r}
-mdl2 = aov(cyl ~ region, data = dat)
-summary(mdl2)
+
+# Here you create a statistical test (lm())
 
 ```
 
-Question 1g
+### Question 1e
+
+Create a boxplot that shows the mean city fuel economy by region. Is there any region that clearly stands out from the others (i.e. which group has a mean that looks much higher or lower than the other groups)? 
 
 ```{r}
-meanCyl=aggregate(cyl~region,data=dat,FUN=mean)
-sdCyl=aggregate(cyl~region,data=dat,FUN=sd)
 
-ggplot(meanCyl, aes(x=region, y = cyl)) + 
-  geom_bar(stat = 'identity') +
-  geom_errorbar(aes(ymin=meanCyl$cyl-sdCyl$cyl, ymax=meanCyl$cyl+sdCyl$cyl),
-                position=position_dodge(.9), 
-                stat = 'identity',
-                size=.3,    # Thinner lines
-                width=.2
-  )
+# Use ggplot to create a boxplot of cty by region
 
 ```
 
-Question 1h
+### Exercise 1f)	
+
+Is there a significant overall effect of region on how many cylinders are in a car? Provide the relevant statistics in the correct form for a lab report.
 
 ```{r}
-mdl3 = aov(displ ~ region, data = dat)
-summary(mdl1)
+
+# Here you create a statistical model of cylinders by region
 
 ```
 
-Question 1i
+### Question 1g
+
+Make a new boxplot that shows the mean number of cylinders for each region. What can you say about the relationship between these two variables?
 
 ```{r}
-meanDispl=aggregate(displ~region,data=dat,FUN=mean)
-sdDispl=aggregate(displ~region,data=dat,FUN=sd)
-
-ggplot(meanDispl, aes(x=region, y = displ)) + 
-  geom_bar(stat = 'identity') +
-  geom_errorbar(aes(ymin=meanDispl$displ-sdDispl$displ, ymax=meanDispl$displ+sdDispl$displ),
-                position=position_dodge(.9), 
-                stat = 'identity',
-                size=.3,    # Thinner lines
-                width=.2
-  )
-```
-
-### Exercise 2
-
-Question 2d
-
-```{r}
-
-mdl1.contrast1 = c(1,0,-1)
-mdl1.contrast2 = c(1,-1,0)
-contrasts(dat$region) = cbind(mdl1.contrast1,mdl1.contrast2)
-
-mdl1Planned = aov(cty ~ region, data = dat)
-summary.lm(mdl1Planned)
-
-```
-
-Question 2e
-
-```{r}
-mdl2.contrast1 = c(-1,0,1)
-mdl2.contrast2 = c(1,-1,0)
-contrasts(dat$region) = cbind(mdl2.contrast1,mdl2.contrast2)
-
-mdl2Planned = aov(cyl ~ region, data = dat)
-summary.lm(mdl2Planned)
-
-```
-
-Question 2f
-
-```{r}
-mdl3.contrast1 = c(-1,-1,2)
-mdl3.contrast2 = c(1,-1,0)
-contrasts(dat$region) = cbind(mdl3.contrast1,mdl3.contrast2)
-
-mdl3Planned = aov(displ ~ region, data = dat)
-summary.lm(mdl3Planned)
-
-```
-
-### Exercise 3
-
-Question 3e
-
-```{r}
-
-#-------------------recoding variables------------------------------------------------
-dat$size[dat$cyl<6]="small"
-dat$size[dat$cyl==6]="medium"
-dat$size[dat$cyl>6]="large"
-dat$size = as.factor(dat$size)
-
-```
-
-Questions 3f, 3g, 3h
-
-```{r}
-mdl4 = aov(cty ~ region*size, data = dat)
-summary(mdl4)
-
-```
-
-Question 3i
-
-```{r}
-meanRegionSize=aggregate(cty~region*size,data=dat,FUN=mean)
-sdRegionSize=aggregate(cty~region*size,data=dat,FUN=sd)
-
-ggplot(meanRegionSize, aes(x=size, y = cty, fill=region)) + 
-  geom_bar(position="dodge", stat = 'identity') +
-  geom_errorbar(aes(ymin=meanRegionSize$cty-sdRegionSize$cty, ymax=meanRegionSize$cty+sdRegionSize$cty),
-                position=position_dodge(.9), stat = 'identity',
-                size=.3,    # Thinner lines
-                width=.2,                 
-  )
 
 
 ```
 
-Question 3j, 3k, 3l
+### Question 1h
+
+Is there a significant overall effect of region on engine displacement? Provide the relevant statistics in the correct form for a lab report.
 
 ```{r}
-mdl4 = aov(displ ~ region*size, data = dat)
-summary(mdl4)
+
+# Now create a statistical test
 
 ```
 
-Question 3i
+### Question 1i
+
+Make a new boxplot that shows the mean engine displacement for each region. What can you say about the relationship between these two variables?
 
 ```{r}
-meanRegionSize=aggregate(displ~region*size,data=dat,FUN=mean)
-sdRegionSize=aggregate(displ~region*size,data=dat,FUN=sd)
 
-ggplot(meanRegionSize, aes(x=size, y = displ, fill=region)) + 
-  geom_bar(position="dodge", stat = 'identity') +
-  geom_errorbar(aes(ymin=meanRegionSize$displ-sdRegionSize$displ, ymax=meanRegionSize$displ+sdRegionSize$displ),
-                position=position_dodge(.9), stat = 'identity',
-                size=.3,    # Thinner lines
-                width=.2                 
-  )
+```
+
+### Exercise 2 – Planned contrasts
+
+a)	In your own words, explain the idea behind planned contrasts? When is it appropriate to run planned contrasts?
+b)	In your own words, explain the idea behind post-hoc comparisons? When it is appropriate to run post-hoc comparisons?
+c)	In your own words, explain orthogonality? Why is it important that contrasts are orthogonal?
+d)	Re-run the ANOVA required to answer 1d), but include contrasts for simultaneously asking i) whether Asian cars are more economical for city driving than American cars and  ii) whether Asian cars are more economical for city driving than European cars? Answer i) and ii) separately, and provide the contrast vectors and the necessary statistics for proper reporting. How do these statistics relate to the figure you produced in question 1e?
+
+```{r}
+
+
+```
+
+### Question 2e
+
+Re-run the ANOVA required to answer 1f), but include contrasts for simultaneously asking i) whether Asian cars have few cylinders than American cars and  ii) whether Asian cars have fewer cylinders than European cars? Answer i) and ii) separately, and provide the contrast vectors and the necessary statistics for proper reporting. How do these statistics relate to the figure you produced in question 1g? 
+
+```{r}
+
+```
+
+### Question 2f
+
+Re-run the ANOVA required to answer 1h), but include contrasts for simultaneously asking i) whether American cars have greater engine displacement than cars from other regions? and ii) whether Asian and European cars have different engine displacement? Answer i) and ii) separately, and provide the contrast vectors and the necessary statistics for proper reporting. How do these statistics relate to the figure you produced in question 1i?
+
+```{r}
+
+
+```
+
+### Exercise 3 – Factorial ANOVA
+
+a)	In your own words, explain what is meant by “factorial design”?
+b)	In your own words, explain what is meant by “main effect”?
+c)	In your own words, explain what is meant by an “interaction”?
+d)	What are effect sizes? How are effect sizes different to p values? Why is it important to report effect sizes?
+e)	Using the same method you used for question 6 on Monday, make a new variable which codes cars by number of cylinders. Specifically, your new vector should code for “small engines” which are less than 6 cylinders, “medium engines” which are exactly 6 cylinders, and “large engines” which are greater than 6 cylinders.
+
+```{r}
+
+#First recode variables
+
+
+```
+
+### Questions 3f, 3g, 3h
+
+For the following 3 questions, run ONE 3 x 3 factorial analysis of variance 
+
+f)	Is there a main effect of region on city fuel economy? Provide the relevant statistics for reporting in a lab report. Include the effect size (for effect sizes you can just use the etasq function in the heplots package 
+g)	Is there a main effect of engine size (your new variable) on city fuel economy? Provide the relevant statistics for reporting in a lab report. Include the effect size
+h)	Is there an interaction between region and size for city fuel economy? Provide the relevant statistics for reporting in a lab report. Include the effect size
+
+```{r}
+
+```
+
+### Question 3i
+
+Use ggplot to make a bar graph that represents average city fuel economy for each of the three regions across the three engine sizes. From this graph, how would you explain any interactions in 3g)? Report the results of relevant post-hoc Bonferroni corrected t-tests.
+
+```{r}
+
+
+```
+
+### Question 3j, 3k, 3l
+
+For the following 3 questions, run ONE 3 x 3 factorial analysis of variance 
+
+j)	Is there a main effect of region on engine displacement? Provide the relevant statistics for reporting in a lab report. Include the effect size
+k)	Is there a main effect of size on engine displacement? Provide the relevant statistics for reporting in a lab report. Include the effect size
+l)	Is there an interaction between region and size for engine displacement? Provide the relevant statistics for reporting in a lab report. Include the effect size
+
+```{r}
+
+
+```
+
+### Question 3m
+
+Use ggplot to make a bar graph that represents average engine displacement for each of the three regions across the three engine sizes. From this graph, how would you explain any interactions in 3g)? Report the results of relevant post-hoc Bonferroni corrected t-tests.
+
+```{r}
+
 
 ```

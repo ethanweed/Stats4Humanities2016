@@ -31,17 +31,18 @@ b)	Explore the data (a dataset called 'common')
 
 ```{r Explore the data}
 
-summary(common) # summarizes all columns (variables)
-head(common) # shows the first 5 rows (data points)
+summary(vehicles) # summarizes all columns (variables)
+head(vehicles) # shows the first 5 rows (data points)
 
 ```
 
 c) What is the time range of the data set? What are the earliest and latest years in the data?
 
 ```{r Time Range}
-range(common$years)
-min(common$years)
-max(common$years)
+
+range(vehicles$year)
+min(vehicles$year)
+max(vehicles$year)
 
 ```
 

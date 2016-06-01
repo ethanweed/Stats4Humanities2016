@@ -152,7 +152,7 @@ ggplot(meanRegion, aes(x=region, y = cty)) +
                 width=.2
   )
 
-#grouped barplot - emnphasise change in size of error bars
+#grouped barplot - emphasise change in size of error bars
 ggplot(meanRegionCyl, aes(x=cyl, y = cty, fill=region)) + 
   geom_bar(position="dodge", stat = 'identity') +
   geom_errorbar(aes(ymin=meanRegionCyl$cty-sdRegionCyl$cty, ymax=meanRegionCyl$cty+sdRegionCyl$cty),

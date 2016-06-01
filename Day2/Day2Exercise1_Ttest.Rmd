@@ -47,7 +47,7 @@ Load necessary libraries : what will you need?
 - e.g. something to plot with
 
 ```{r}
-
+library(ggplot2)
 ```
 
 ### Define your working directory and load the data
@@ -60,9 +60,9 @@ Load necessary libraries : what will you need?
 ```{r}
 
 getwd()
-#locpath=
+locpath="/Users/semrf/Dropbox/My courses/2016 - stats for humanities/Exercises/Day2"
 setwd(locpath)
-#Data =
+Data = read.csv("Day2Exercise1.csv")
 
 ```
 
@@ -94,6 +94,7 @@ Data$diagnosis
 
 # Select only participants with depression
 Data[Data$diagnosis==1,]
+
 ```
 
 ### Make sure the variables are in the right format (e.g. numeric vs. factor)
@@ -104,8 +105,12 @@ In particular, pay attention to:
 - diagnosis
 
 ```{r}
-
-
+# Make sure that participant ID (nr) is considered as categorical (R calls categorical "factor")
+Data$nr=as.factor(Data$nr)
+# Make sure that gender is considered a factor
+Data$gender=as.factor(Data$gender)
+# Make sure that diagnosis is considered a factor
+Data$diagnosis=as.factor(Data$diagnosis)
 ```
 
 ### Quantify the dataset
@@ -130,8 +135,11 @@ First we want to check a few things:
 This is simple. Let's just summarize the column diagnosis
 
 ```{r}
+# Check the number of participants
 
-cdata <- aggregate(Data["nr"], by=Data[c("diagnosis")], FUN=length)
+ParticipantNr=nrow(Data)
+
+aggregate(Data["nr"], by=Data["diagnosis"], FUN=length)
 
 ```
 
@@ -140,7 +148,8 @@ cdata <- aggregate(Data["nr"], by=Data[c("diagnosis")], FUN=length)
 
 ```{r}
 
-
+aggregate(Data["nr"], by=Data["gender"], FUN=length)
+aggregate(Data["nr"], by=Data[c("gender","diagnosis")], FUN=length)
 ```
 
 #### What about age? In the full sample and by diagnosis?
@@ -154,6 +163,13 @@ What can we infer from the graph? And from the calculation?
 
 ```{r}
 
+ggplot(Data,aes(x=diagnosis,y=age))+geom_boxplot()
+
+ggplot(Data,aes(x=diagnosis,y=age))+geom_violin()
+
+lm(age~diagnosis,Data)
+
+summary(lm(age~diagnosis,Data))
 # Boxplot
 
 plot2 <- ggplot(Data) + geom_boxplot(aes(x=diagnosis,y=age, fill=diagnosis)) +
