@@ -119,6 +119,8 @@ You can also get a quantitative overview over the different variables (Min, 1st 
 
 ```{r}
 
+summary(Data$age)
+sd(Data$age,na.rm=TRUE)
 ```
 
 ### Let's get to business - checking the participant sample
@@ -150,6 +152,11 @@ aggregate(Data["nr"], by=Data["diagnosis"], FUN=length)
 
 aggregate(Data["nr"], by=Data["gender"], FUN=length)
 aggregate(Data["nr"], by=Data[c("gender","diagnosis")], FUN=length)
+
+aggregate(Data["age"],by=Data["diagnosis"], FUN=mean, na.rm=TRUE)
+
+aggregate(age~diagnosis*gender,Data, FUN=mean, na.rm=TRUE)
+
 ```
 
 #### What about age? In the full sample and by diagnosis?
@@ -165,11 +172,10 @@ What can we infer from the graph? And from the calculation?
 
 ggplot(Data,aes(x=diagnosis,y=age))+geom_boxplot()
 
-ggplot(Data,aes(x=diagnosis,y=age))+geom_violin()
+ggplot(Data,aes(x=diagnosis,y=education))+geom_violin()
 
-lm(age~diagnosis,Data)
-
-summary(lm(age~diagnosis,Data))
+AgeDiagnosisModel=lm(age~diagnosis,Data)
+summary(AgeDiagnosisModel)
 # Boxplot
 
 plot2 <- ggplot(Data) + geom_boxplot(aes(x=diagnosis,y=age, fill=diagnosis)) +
@@ -198,7 +204,7 @@ What can we infer from the graph? And from the calculation?
 
 Let's try now to look at relations of data
 
-So for example: do people with depression use less words than not depressed people?
+So for example: do people with depression use fewer words than not depressed people?
 
 #### Plotting
 
@@ -211,7 +217,7 @@ Let's use a plot to check that out:
 What can you infer from the graph?
 
 ```{r}
-
+ggplot(Data,aes(x=diagnosis,y=totalWords))+geom_violin()
 
 ```
 
