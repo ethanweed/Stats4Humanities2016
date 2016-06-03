@@ -304,3 +304,27 @@ Is depression a yes/no diagnosis? What about severity of clinical features?  [To
   - Use of negative and depression severity (plot)
   - Use of past tense and depression severity (plot)
 
+```{r}
+
+ggplot(Data,aes(x=diagnosis,y=hamD17))+geom_violin()
+ggplot(Data,aes(x=hamD17))+geom_histogram()
+
+ggplot(Data,aes(x=hamD17))+geom_histogram(bins=7)
+summary(lm(pastVerbsPerc~hamD17,Data))
+
+ggplot(Data,aes(x=hamD17,y=pastVerbsPerc,colour=diagnosis))+geom_point()+geom_smooth(method=lm)
+
+ggplot(Data,aes(x=hamD17,y=pastVerbsPerc))+geom_point(aes(colour=diagnosis))+geom_smooth(method=lm)+ggtitle('Biutiful Graph!')+theme_classic()+scale_colour_discrete("Diagnostic category",label=c("Comparison Group","Depression Group"))
+
+#+theme_classic()+scale_color_discrete("Diagnosis",labels=c("Control","Depression"))
+
+ggsave('Fig1.eps')
+
+model2=lm(pastVerbsPerc~age+diagnosis,Data)
+summary(model2)
+model3=lm(pastVerbsPerc~age*diagnosis,Data)
+summary(model3)
+
+ggplot(Data,aes(x=age,y=pastVerbsPerc,colour=diagnosis))+geom_point()+geom_smooth(method=lm)
+```
+

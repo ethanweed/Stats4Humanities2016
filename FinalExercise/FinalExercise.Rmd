@@ -32,7 +32,7 @@ In particular you will have to:
 - Describe and plot the participants' Empathy and Systemizing Scores
 - Describe and plot Empathy and Systemizing according to gender
 - Test for significant differences (t-test) between genders
-- Load the new Lego dataset (AllData.csv)
+- Load the new Lego dataset (FinalExercise.csv)
 
 - Describe and plot the raters' Accuracy in guessing the concepts represented by the models.
 
